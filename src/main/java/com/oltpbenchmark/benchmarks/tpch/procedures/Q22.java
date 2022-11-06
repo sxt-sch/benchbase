@@ -18,6 +18,7 @@
 package com.oltpbenchmark.benchmarks.tpch.procedures;
 
 import com.oltpbenchmark.api.SQLStmt;
+import com.oltpbenchmark.benchmarks.tpch.TPCHUtil;
 import com.oltpbenchmark.util.RandomGenerator;
 
 import java.sql.Connection;
@@ -28,47 +29,7 @@ import java.util.Set;
 
 public class Q22 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               cntrycode,
-               COUNT(*) AS numcust,
-               SUM(c_acctbal) AS totacctbal
-            FROM
-               (
-                  SELECT
-                     SUBSTRING(c_phone FROM 1 FOR 2) AS cntrycode,
-                     c_acctbal
-                  FROM
-                     customer
-                  WHERE
-                     SUBSTRING(c_phone FROM 1 FOR 2) IN (?, ?, ?, ?, ?, ?, ?)
-                     AND c_acctbal >
-                     (
-                         SELECT
-                            AVG(c_acctbal)
-                         FROM
-                            customer
-                         WHERE
-                            c_acctbal > 0.00
-                            AND SUBSTRING(c_phone FROM 1 FOR 2) IN (?, ?, ?, ?, ?, ?, ?)
-                     )
-                     AND NOT EXISTS
-                     (
-                         SELECT
-                            *
-                         FROM
-                            orders
-                         WHERE
-                            o_custkey = c_custkey
-                     )
-               )
-               AS custsale
-            GROUP BY
-               cntrycode
-            ORDER BY
-               cntrycode
-            """
-    );
+    public final SQLStmt query_stmt = new SQLStmt(TPCHUtil.loadQuery("Q22.sql"));
 
     @Override
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {

@@ -18,6 +18,7 @@
 package com.oltpbenchmark.benchmarks.tpch.procedures;
 
 import com.oltpbenchmark.api.SQLStmt;
+import com.oltpbenchmark.benchmarks.tpch.TPCHUtil;
 import com.oltpbenchmark.util.RandomGenerator;
 
 import java.sql.Connection;
@@ -27,18 +28,7 @@ import java.sql.SQLException;
 
 public class Q6 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               SUM(l_extendedprice * l_discount) AS revenue
-            FROM
-               lineitem
-            WHERE
-               l_shipdate >= DATE ?
-               AND l_shipdate < DATE ? + INTERVAL '1' YEAR
-               AND l_discount BETWEEN ? - 0.01 AND ? + 0.01
-               AND l_quantity < ?
-            """
-    );
+    public final SQLStmt query_stmt = new SQLStmt(TPCHUtil.loadQuery("Q6.sql"));
 
     @Override
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {

@@ -18,6 +18,7 @@
 package com.oltpbenchmark.benchmarks.tpch.procedures;
 
 import com.oltpbenchmark.api.SQLStmt;
+import com.oltpbenchmark.benchmarks.tpch.TPCHUtil;
 import com.oltpbenchmark.util.RandomGenerator;
 
 import java.sql.Connection;
@@ -27,48 +28,11 @@ import java.sql.Statement;
 
 public class Q15 extends GenericQuery {
 
-    public final SQLStmt createview_stmt = new SQLStmt("""
-            CREATE view revenue0 (supplier_no, total_revenue) AS
-            SELECT
-               l_suppkey,
-               SUM(l_extendedprice * (1 - l_discount))
-            FROM
-               lineitem
-            WHERE
-               l_shipdate >= DATE ?
-               AND l_shipdate < DATE ? + INTERVAL '3' MONTH
-            GROUP BY
-               l_suppkey
-            """
-    );
+    public final SQLStmt createview_stmt = new SQLStmt(TPCHUtil.loadQuery("Q15_1.sql"));
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               s_suppkey,
-               s_name,
-               s_address,
-               s_phone,
-               total_revenue
-            FROM
-               supplier,
-               revenue0
-            WHERE
-               s_suppkey = supplier_no
-               AND total_revenue = (
-                  SELECT
-                     MAX(total_revenue)
-                  FROM
-                     revenue0
-               )
-            ORDER BY
-               s_suppkey
-            """
-    );
+    public final SQLStmt query_stmt = new SQLStmt(TPCHUtil.loadQuery("Q15_2.sql"));
 
-    public final SQLStmt dropview_stmt = new SQLStmt("""
-            DROP VIEW revenue0
-            """
-    );
+    public final SQLStmt dropview_stmt = new SQLStmt("DROP VIEW revenue0");
 
     @Override
     public void run(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {

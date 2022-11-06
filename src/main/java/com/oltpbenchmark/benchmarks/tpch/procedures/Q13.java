@@ -27,32 +27,7 @@ import java.sql.SQLException;
 
 public class Q13 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               c_count,
-               COUNT(*) AS custdist
-            FROM
-               (
-                  SELECT
-                     c_custkey,
-                     COUNT(o_orderkey) AS c_count
-                  FROM
-                     customer
-                     LEFT OUTER JOIN
-                        orders
-                        ON c_custkey = o_custkey
-                        AND o_comment NOT LIKE ?
-                  GROUP BY
-                     c_custkey
-               )
-               AS c_orders
-            GROUP BY
-               c_count
-            ORDER BY
-               custdist DESC,
-               c_count DESC
-            """
-    );
+    public final SQLStmt query_stmt = new SQLStmt(TPCHUtil.loadQuery("Q13.sql"));
 
     @Override
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {

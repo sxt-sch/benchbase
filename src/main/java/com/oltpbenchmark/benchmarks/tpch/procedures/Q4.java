@@ -18,6 +18,7 @@
 package com.oltpbenchmark.benchmarks.tpch.procedures;
 
 import com.oltpbenchmark.api.SQLStmt;
+import com.oltpbenchmark.benchmarks.tpch.TPCHUtil;
 import com.oltpbenchmark.util.RandomGenerator;
 
 import java.sql.Connection;
@@ -27,31 +28,7 @@ import java.sql.SQLException;
 
 public class Q4 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               o_orderpriority,
-               COUNT(*) AS order_count
-            FROM
-               orders
-            WHERE
-               o_orderdate >= DATE ?
-               AND o_orderdate < DATE ? + INTERVAL '3' MONTH
-               AND EXISTS
-               (
-                  SELECT
-                     *
-                  FROM
-                     lineitem
-                  WHERE
-                     l_orderkey = o_orderkey
-                     AND l_commitdate < l_receiptdate
-               )
-            GROUP BY
-               o_orderpriority
-            ORDER BY
-               o_orderpriority
-            """
-    );
+    public final SQLStmt query_stmt = new SQLStmt(TPCHUtil.loadQuery("Q4.sql"));
 
     @Override
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {

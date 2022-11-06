@@ -28,25 +28,7 @@ import java.sql.SQLException;
 
 public class Q17 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               SUM(l_extendedprice) / 7.0 AS avg_yearly
-            FROM
-               lineitem,
-               part
-            WHERE
-               p_partkey = l_partkey
-               AND p_brand = ?
-               AND p_container = ?
-               AND l_quantity < (
-               SELECT
-                  0.2 * AVG(l_quantity)
-               FROM
-                  lineitem
-               WHERE
-                  l_partkey = p_partkey )
-            """
-    );
+    public final SQLStmt query_stmt = new SQLStmt(TPCHUtil.loadQuery("Q17.sql"));
 
     @Override
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {

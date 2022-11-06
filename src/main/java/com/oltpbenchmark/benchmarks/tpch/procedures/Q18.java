@@ -18,6 +18,7 @@
 package com.oltpbenchmark.benchmarks.tpch.procedures;
 
 import com.oltpbenchmark.api.SQLStmt;
+import com.oltpbenchmark.benchmarks.tpch.TPCHUtil;
 import com.oltpbenchmark.util.RandomGenerator;
 
 import java.sql.Connection;
@@ -26,43 +27,7 @@ import java.sql.SQLException;
 
 public class Q18 extends GenericQuery {
 
-    public final SQLStmt query_stmt = new SQLStmt("""
-            SELECT
-               c_name,
-               c_custkey,
-               o_orderkey,
-               o_orderdate,
-               o_totalprice,
-               SUM(l_quantity)
-            FROM
-               customer,
-               orders,
-               lineitem
-            WHERE
-               o_orderkey IN
-               (
-                  SELECT
-                     l_orderkey
-                  FROM
-                     lineitem
-                  GROUP BY
-                     l_orderkey
-                  HAVING
-                     SUM(l_quantity) > ?
-               )
-               AND c_custkey = o_custkey
-               AND o_orderkey = l_orderkey
-            GROUP BY
-               c_name,
-               c_custkey,
-               o_orderkey,
-               o_orderdate,
-               o_totalprice
-            ORDER BY
-               o_totalprice DESC,
-               o_orderdate LIMIT 100
-            """
-    );
+    public final SQLStmt query_stmt = new SQLStmt(TPCHUtil.loadQuery("Q18.sql"));
 
     @Override
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {

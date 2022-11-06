@@ -17,7 +17,15 @@
 
 package com.oltpbenchmark.benchmarks.tpch;
 
+import com.oltpbenchmark.util.FileUtil;
 import com.oltpbenchmark.util.RandomGenerator;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 public class TPCHUtil {
 
@@ -112,6 +120,17 @@ public class TPCHUtil {
         int N = rand.number(1, 5);
 
         return String.format("Brand#%d%d", M, N);
+    }
+
+    public static String loadQuery(String qName) {
+        String sqltext = "";
+        try {
+            String filePath = "/benchmarks/tpcc/" + qName + ".sql";
+            sqltext = FileUtils.readFileToString(new File(filePath), StandardCharsets.UTF_8);
+        } catch (Exception  ex) {
+            return "";
+        }
+        return sqltext;
     }
 
 }
