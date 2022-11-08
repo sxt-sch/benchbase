@@ -4,7 +4,7 @@
     <!-- Connection details -->
     <type>Ignite</type>
     <driver>org.apache.ignite.IgniteJdbcThinDriver</driver>
-    <url>jdbc:ignite:thin//dwh-failover-aks-sxtlab.centralus.cloudapp.azure.com:10800</url>
+    <url>jdbc:ignite:thin://172.21.0.2:10800</url>
     <!-- <username>admin</username>
     <password>password</password>
     -->
@@ -12,7 +12,7 @@
     <batchsize>128</batchsize>
 
     <!-- Scale factor is the number of warehouses in TPCC -->
-    <scalefactor>10</scalefactor>
+    <scalefactor>1</scalefactor>
 
     <!-- The workload -->
     <terminals>1</terminals>

@@ -501,6 +501,7 @@ public class DBWorkload {
         Parameters params = new Parameters();
         FileBasedConfigurationBuilder<XMLConfiguration> builder = new FileBasedConfigurationBuilder<>(XMLConfiguration.class)
                 .configure(params.xml()
+                    .setBasePath(System.getProperty("use.dir"))
                         .setFileName(filename)
                         .setListDelimiterHandler(new DisabledListDelimiterHandler())
                         .setExpressionEngine(new XPathExpressionEngine()));
