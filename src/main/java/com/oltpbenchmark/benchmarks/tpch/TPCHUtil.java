@@ -24,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
@@ -125,8 +126,9 @@ public class TPCHUtil {
     public static String loadQuery(String qName) {
         String sqltext = "";
         try {
-            String filePath = TPCHUtil.class.getClassLoader().getResource("benchmarks/tpch/" + qName).getPath();
-            sqltext = FileUtils.readFileToString(new File(filePath), StandardCharsets.UTF_8);
+            InputStream inSql = TPCHUtil.class.getResource("/benchmarks/tpch/" + qName).openStream();
+            byte[] sqlBytes = inSql.readAllBytes();
+            sqltext = new String(sqlBytes, StandardCharsets.UTF_8);
         } catch (Exception  ex) {
             return "";
         }
