@@ -39,10 +39,18 @@ public class Q17 extends GenericQuery {
         String containerS1 = TPCHUtil.choice(TPCHConstants.CONTAINERS_S1, rand);
         String containerS2 = TPCHUtil.choice(TPCHConstants.CONTAINERS_S2, rand);
         String container = String.format("%s %s", containerS1, containerS2);
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, brand);
         stmt.setString(2, container);
+ */
+        String qstr = TPCHUtil.loadQuery("Q17.sql");
+        qstr = qstr.replaceFirst("\\?", "'" + brand + "'");
+        qstr = qstr.replaceFirst("\\?", "'" + container + "'");
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

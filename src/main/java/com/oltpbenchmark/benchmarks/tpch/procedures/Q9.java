@@ -36,9 +36,15 @@ public class Q9 extends GenericQuery {
         String color = "%" + TPCHUtil.choice(TPCHConstants.P_NAME_GENERATOR, rand) + "%";
 
         LOG.debug("attempting to execute sql [{}] for color [{}]", query_stmt.getSQL(), color);
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, color);
+ */
+        String q1str = TPCHUtil.loadQuery("Q9.sql");
+        q1str = q1str.replace( "?", "'" + color + "'");
+        SQLStmt qstmt = new SQLStmt(q1str);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

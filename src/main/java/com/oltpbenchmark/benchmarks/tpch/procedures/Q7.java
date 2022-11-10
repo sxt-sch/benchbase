@@ -41,12 +41,22 @@ public class Q7 extends GenericQuery {
         while (nation2.equals(nation1)) {
             nation2 = TPCHUtil.choice(TPCHConstants.N_NAME, rand);
         }
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, nation1);
         stmt.setString(2, nation2);
         stmt.setString(3, nation2);
         stmt.setString(4, nation1);
+ */
+        String qstr = TPCHUtil.loadQuery("Q7.sql");
+        qstr = qstr.replaceFirst("\\?", "'" + nation1 + "'");
+        qstr = qstr.replaceFirst("\\?", "'" + nation2 + "'");
+        qstr = qstr.replaceFirst("\\?", "'" + nation2 + "'");
+        qstr = qstr.replaceFirst("\\?", "'" + nation1 + "'");
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

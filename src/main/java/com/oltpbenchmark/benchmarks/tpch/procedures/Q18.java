@@ -33,9 +33,15 @@ public class Q18 extends GenericQuery {
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {
         // QUANTITY is randomly selected within [312..315]
         int quantity = rand.number(312, 315);
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setInt(1, quantity);
+ */
+        String qstr = TPCHUtil.loadQuery("Q18.sql");
+        qstr = qstr.replaceFirst("\\?", String.valueOf(quantity));
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

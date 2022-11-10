@@ -34,9 +34,16 @@ public class Q21 extends GenericQuery {
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {
         // NATION is randomly selected within the list of values defined for N_NAME in Clause 4.2.3
         String nation = TPCHUtil.choice(TPCHConstants.N_NAME, rand);
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, nation);
+ */
+        String qstr = TPCHUtil.loadQuery("Q21.sql");
+        qstr = qstr.replaceFirst("\\?", "'" + nation + "'");
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
+
         return stmt;
     }
 }

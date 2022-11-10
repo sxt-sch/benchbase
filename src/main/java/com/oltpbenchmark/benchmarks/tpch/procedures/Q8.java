@@ -45,11 +45,20 @@ public class Q8 extends GenericQuery {
         String syllable2 = TPCHUtil.choice(TPCHConstants.TYPE_S2, rand);
         String syllable3 = TPCHUtil.choice(TPCHConstants.TYPE_S3, rand);
         String type = String.format("%s %s %s", syllable1, syllable2, syllable3);
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, nation);
         stmt.setString(2, region);
         stmt.setString(3, type);
+ */
+        String qstr = TPCHUtil.loadQuery("Q8.sql");
+        qstr = qstr.replaceFirst("\\?", "'" + nation + "'");
+        qstr = qstr.replaceFirst("\\?", "'" + region + "'");
+        qstr = qstr.replaceFirst("\\?", "'" + type + "'");
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

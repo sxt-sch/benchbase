@@ -57,13 +57,23 @@ public class Q16 extends GenericQuery {
             sizes[i] = num;
             seen.add(num);
         }
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, brand);
         stmt.setString(2, type);
         for (int i = 0; i < 8; i++) {
             stmt.setInt(3 + i, sizes[i]);
         }
+ */
+        String qstr = TPCHUtil.loadQuery("Q16.sql");
+        qstr = qstr.replaceFirst("\\?", "'" + brand + "'");
+        qstr = qstr.replaceFirst("\\?", "'" + type + "'");
+        for (int i = 0; i < 8; i++) {
+            qstr = qstr.replaceFirst("\\?", String.valueOf(sizes[i]));
+        }
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

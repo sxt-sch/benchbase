@@ -54,7 +54,7 @@ public class Q22 extends GenericQuery {
             codes[i] = num;
             seen.add(num);
         }
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         for (int i = 0; i < 7; i++) {
             stmt.setString(1 + i, String.valueOf(codes[i]));
@@ -62,6 +62,17 @@ public class Q22 extends GenericQuery {
         for (int i = 0; i < 7; i++) {
             stmt.setString(8 + i, String.valueOf(codes[i]));
         }
+ */
+        String qstr = TPCHUtil.loadQuery("Q22.sql");
+        for (int i = 0; i < 7; i++) {
+            qstr = qstr.replaceFirst("\\?", String.valueOf(codes[i]));
+        }
+        for (int i = 0; i < 7; i++) {
+            qstr = qstr.replaceFirst("\\?", String.valueOf(codes[i]));
+        }
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

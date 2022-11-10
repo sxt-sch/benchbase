@@ -46,6 +46,7 @@ public class Q19 extends GenericQuery {
         String brand2 = TPCHUtil.randomBrand(rand);
         String brand3 = TPCHUtil.randomBrand(rand);
 
+        /*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, brand1);
         stmt.setInt(2, quantity1);
@@ -56,6 +57,21 @@ public class Q19 extends GenericQuery {
         stmt.setString(7, brand3);
         stmt.setInt(8, quantity3);
         stmt.setInt(9, quantity3);
+        */
+        String qstr = TPCHUtil.loadQuery("Q19.sql");
+        qstr = qstr.replaceFirst("\\?", "'" + brand1 + "'");
+        qstr = qstr.replaceFirst("\\?", String.valueOf(quantity1));
+        qstr = qstr.replaceFirst("\\?", String.valueOf(quantity1));
+        qstr = qstr.replaceFirst("\\?", "'" + brand2 + "'");
+        qstr = qstr.replaceFirst("\\?", String.valueOf(quantity2));
+        qstr = qstr.replaceFirst("\\?", String.valueOf(quantity2));
+        qstr = qstr.replaceFirst("\\?", "'" + brand3 + "'");
+        qstr = qstr.replaceFirst("\\?", String.valueOf(quantity3));
+        qstr = qstr.replaceFirst("\\?", String.valueOf(quantity3));
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }
