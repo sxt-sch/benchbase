@@ -14,4 +14,4 @@ FROM
 WHERE
         l_partkey = p_partkey
   AND l_shipdate >= DATE ?
-  AND l_shipdate < DATE ? + INTERVAL '1' MONTH
+  AND l_shipdate < DATE ?

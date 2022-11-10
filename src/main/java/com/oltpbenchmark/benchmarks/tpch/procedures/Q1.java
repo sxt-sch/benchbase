@@ -31,10 +31,18 @@ public class Q1 extends GenericQuery {
 
     @Override
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {
-        String delta = String.valueOf(rand.number(60, 120));
+        int deltaNum = rand.number(60, 120);
+        String delta = String.valueOf(deltaNum);
 
-        PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
-        stmt.setString(1, delta);
+        // TODO: could fix in Ignite JDBC driver
+        // PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
+        // stmt.setInt(1, deltaNum);
+
+        String q1str = TPCHUtil.loadQuery("Q1.sql");
+        q1str = q1str.replace( "?", delta);
+        SQLStmt qstmt = new SQLStmt(q1str);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

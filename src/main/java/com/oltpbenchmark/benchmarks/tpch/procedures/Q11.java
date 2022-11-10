@@ -37,11 +37,22 @@ public class Q11 extends GenericQuery {
 
         // FRACTION is chosen as 0.0001 / SF
         double fraction = 0.0001 / scaleFactor;
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, nation);
         stmt.setDouble(2, fraction);
         stmt.setString(3, nation);
+*/
+
+        nation = "'" + nation + "'";
+        String qstr = TPCHUtil.loadQuery("Q11.sql");
+        qstr = qstr.replaceFirst("\\?", nation);
+        qstr = qstr.replaceFirst("\\?", String.valueOf(fraction));
+        qstr = qstr.replaceFirst("\\?", nation);
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

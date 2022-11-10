@@ -38,10 +38,21 @@ public class Q5 extends GenericQuery {
         int year = rand.number(1993, 1997);
         String date = String.format("%d-01-01", year);
 
-        PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
-        stmt.setString(1, region);
-        stmt.setDate(2, Date.valueOf(date));
-        stmt.setDate(3, Date.valueOf(date));
+        //PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
+        //stmt.setString(1, region);
+        //stmt.setDate(2, Date.valueOf(date));
+        //stmt.setDate(3, Date.valueOf(date));
+
+        region = "'" + region + "'";
+        date = "'" + date + "'";
+
+        String qstr = TPCHUtil.loadQuery("Q5.sql");
+        qstr = qstr.replaceFirst("\\?", region);
+        qstr = qstr.replaceFirst("\\?", date);
+        qstr = qstr.replaceFirst("\\?", date);
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
         return stmt;
     }
 }

@@ -34,20 +34,31 @@ public class Q20 extends GenericQuery {
     @Override
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {
         // COLOR is randomly selected within the list of values defined for the generation of P_NAME
-        String color = TPCHUtil.choice(TPCHConstants.P_NAME_GENERATOR, rand) + "%";
+        String color = "'" + TPCHUtil.choice(TPCHConstants.P_NAME_GENERATOR, rand) + "%" + "'";
 
         // DATE is the first of January of a randomly selected year within 1993..1997
         int year = rand.number(1993, 1997);
-        String date = String.format("%d-01-01", year);
+        String date1 = String.format("'%d-01-01'", year);
+        String date2 = String.format("'%d-01-01'", year + 1);
 
         // NATION is randomly selected within the list of values defined for N_NAME in Clause 4.2.3
         String nation = TPCHUtil.choice(TPCHConstants.N_NAME, rand);
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, color);
-        stmt.setDate(2, Date.valueOf(date));
-        stmt.setDate(3, Date.valueOf(date));
+        stmt.setDate(2, Date.valueOf(date1));
+        stmt.setDate(3, Date.valueOf(date2));
         stmt.setString(4, nation);
+*/
+        String qstr = TPCHUtil.loadQuery("Q20.sql");
+        qstr = qstr.replaceFirst("\\?", color);
+        qstr = qstr.replaceFirst("\\?", date1);
+        qstr = qstr.replaceFirst("\\?", date2);
+        qstr = qstr.replaceFirst("\\?", "'" + nation + "'");
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

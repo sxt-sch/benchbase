@@ -39,10 +39,19 @@ public class Q3 extends GenericQuery {
         int day = rand.number(1, 31);
         String date = String.format("1995-03-%02d", day);
 
-        PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
-        stmt.setString(1, segment);
-        stmt.setDate(2, Date.valueOf(date));
-        stmt.setDate(3, Date.valueOf(date));
+        //PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
+        //stmt.setString(1, segment);
+        //stmt.setDate(2, Date.valueOf(date));
+        //stmt.setDate(3, Date.valueOf(date));
+        date = "'" + date + "'";
+        segment = "'" + segment + "'";
+        String qstr = TPCHUtil.loadQuery("Q3.sql");
+        qstr = qstr.replaceFirst("\\?", segment);
+        qstr = qstr.replaceFirst("\\?", date);
+        qstr = qstr.replaceFirst("\\?", date);
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
         return stmt;
     }
 }

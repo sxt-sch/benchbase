@@ -127,6 +127,8 @@ public class DBWorkload {
             wrkld.setMaxRetries(xmlConfig.getInt("retries", 3));
             wrkld.setNewConnectionPerTxn(xmlConfig.getBoolean("newConnectionPerTxn", false));
 
+            LOG.info("Workload connect to: " + wrkld.getUrl());
+
             int terminals = xmlConfig.getInt("terminals[not(@bench)]", 0);
             terminals = xmlConfig.getInt("terminals" + pluginTest, terminals);
             wrkld.setTerminals(terminals);

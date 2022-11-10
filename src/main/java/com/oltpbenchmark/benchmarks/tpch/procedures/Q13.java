@@ -37,10 +37,15 @@ public class Q13 extends GenericQuery {
         // WORD2 is randomly selected from 4 possible values: packages, requests, accounts, deposits
         String word2 = TPCHUtil.choice(new String[]{"packages", "requests", "accounts", "deposits"}, rand);
 
-        String filter = "%" + word1 + "%" + word2 + "%";
+        String filter = "'%" + word1 + "%" + word2 + "%'";
 
-        PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
-        stmt.setString(1, filter);
+        //PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
+        //stmt.setString(1, filter);
+
+        String qstr = TPCHUtil.loadQuery("Q13.sql");
+        qstr = qstr.replaceFirst("\\?", filter);
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
         return stmt;
     }
 }

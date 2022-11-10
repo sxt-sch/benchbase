@@ -36,10 +36,19 @@ public class Q10 extends GenericQuery {
         int year = rand.number(1993, 1995);
         int month = rand.number(year == 1993 ? 2 : 1, year == 1995 ? 1 : 12);
         String date = String.format("%d-%02d-01", year, month);
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setDate(1, Date.valueOf(date));
         stmt.setDate(2, Date.valueOf(date));
+*/
+        date = "'" + date + "'";
+        String qstr = TPCHUtil.loadQuery("Q10.sql");
+        qstr = qstr.replaceFirst("\\?", date);
+        qstr = qstr.replaceFirst("\\?", date);
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

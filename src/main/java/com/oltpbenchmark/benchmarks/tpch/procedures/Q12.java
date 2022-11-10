@@ -46,12 +46,27 @@ public class Q12 extends GenericQuery {
         // DATE is the first of January of a randomly selected year within [1993 .. 1997]
         int year = rand.number(1993, 1997);
         String date = String.format("%d-01-01", year);
-
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setString(1, shipMode1);
         stmt.setString(2, shipMode2);
         stmt.setDate(3, Date.valueOf(date));
         stmt.setDate(4, Date.valueOf(date));
+*/
+        date = "'" + date + "'";
+        shipMode1 = "'" + shipMode1 + "'";
+        shipMode2 = "'" + shipMode2 + "'";
+
+        String qstr = TPCHUtil.loadQuery("Q12.sql");
+        qstr = qstr.replaceFirst("\\?", shipMode1);
+        qstr = qstr.replaceFirst("\\?", shipMode2);
+
+        qstr = qstr.replaceFirst("\\?", date);
+        qstr = qstr.replaceFirst("\\?", date);
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

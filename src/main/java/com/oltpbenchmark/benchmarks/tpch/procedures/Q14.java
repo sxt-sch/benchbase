@@ -34,12 +34,18 @@ public class Q14 extends GenericQuery {
     protected PreparedStatement getStatement(Connection conn, RandomGenerator rand, double scaleFactor) throws SQLException {
         // DATE is the first day of a month randomly selected from a random year within [1993 .. 1997]
         int year = rand.number(1993, 1997);
-        int month = rand.number(1, 12);
-        String date = String.format("%d-%02d-01", year, month);
-
+        int month = rand.number(1, 11);
+/*
         PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
         stmt.setDate(1, Date.valueOf(date));
         stmt.setDate(2, Date.valueOf(date));
+*/
+        String qstr = TPCHUtil.loadQuery("Q14.sql");
+        qstr = qstr.replaceFirst("\\?", String.format("'%d-%02d-01'", year, month));
+        qstr = qstr.replaceFirst("\\?", String.format("'%d-%02d-01'", year, month + 1));
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
+
         return stmt;
     }
 }

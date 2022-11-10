@@ -36,9 +36,16 @@ public class Q4 extends GenericQuery {
         int month = rand.number(1, 10);
         String date = String.format("%d-%02d-01", year, month);
 
-        PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
-        stmt.setDate(1, Date.valueOf(date));
-        stmt.setDate(2, Date.valueOf(date));
+        //PreparedStatement stmt = this.getPreparedStatement(conn, query_stmt);
+        //stmt.setDate(1, Date.valueOf(date));
+        //stmt.setDate(2, Date.valueOf(date));
+        date = "'" + date + "'";
+        String qstr = TPCHUtil.loadQuery("Q4.sql");
+        qstr = qstr.replaceFirst("\\?", date);
+        qstr = qstr.replaceFirst("\\?", date);
+
+        SQLStmt qstmt = new SQLStmt(qstr);
+        PreparedStatement stmt = this.getPreparedStatement(conn, qstmt);
         return stmt;
     }
 }

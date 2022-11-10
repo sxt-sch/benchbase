@@ -125,7 +125,7 @@ public class TPCHUtil {
     public static String loadQuery(String qName) {
         String sqltext = "";
         try {
-            String filePath = "/benchmarks/tpcc/" + qName + ".sql";
+            String filePath = TPCHUtil.class.getClassLoader().getResource("benchmarks/tpch/" + qName).getPath();
             sqltext = FileUtils.readFileToString(new File(filePath), StandardCharsets.UTF_8);
         } catch (Exception  ex) {
             return "";
